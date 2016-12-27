@@ -4,7 +4,7 @@
 
 To install the plugin, head over to the machine with Homebridge set up and run
 ```
-sudo npm install -g homebridge-sonytvremote
+sudo npm install -g https://github.com/tekuonline/homebridge-sonytvremote.git
 ```
 
 ###### Configuration
