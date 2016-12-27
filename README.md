@@ -18,7 +18,7 @@ To make Homebridge aware of the new plugin, you will have to add it to your conf
 {
                 "accessory": "SonyTV",
                 "name": "Living room TV",
-                "mac": "D8:5D",
+                "mac": "7E-D3-BC-61-1D-58",
                 "ip": "10.0.1.13",
                 "tvsource":"tv:dvbs",
                 "maxchannels": 18,
