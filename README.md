@@ -1,13 +1,6 @@
-# Sony TV Power control
-### Turn on or off your Sony TV with Siri
-### Change Volume (create Scenes in Homekit App like "Eve Elgato or euqal)
-### Change Channel (create Scenes in Homekit App like "Eve Elgato or euqal)
-### to Start Fireplace select Channel 1001 (create Scenes in Homekit App like "Eve Elgato or euqal)
-### Please start homebridge first time in Console to Enter RemotePin !
+# Sony TV control
 
-###### Installing
-### need following packet´s: ping, base-64,prompt, wake_on_lan 
-### 
+###### Instalation
 
 To install the plugin, head over to the machine with Homebridge set up and run
 ```
@@ -23,18 +16,15 @@ To make Homebridge aware of the new plugin, you will have to add it to your conf
 
 "accessories": [
 {
-"accessory": "SonyTV",
-"name": "Fernseher",
-"mac": "3C-07-71-DB-E2-A9",
-"ip": "192.168.2.3",
-"tvsource":"tv:dvbs", // tv:dvbc // tc:dvbt
-"maxchannels": 500,
-"soundoutput":"speaker",
-"onscript":"/home/pi/scripts/dolbyon.sh", // can be empty
-"offscript":"/home/pi/scripts/dolbyoff.sh",  // can bee empty
-"savefilenameprefix":"/home/pi/sonycookie"  // <- (default when its empty) is a file prefix, not path prefix. Make sure after enter pin in console in sudo mode that file is readable (chmod 777 ..)
-
-} ]
+                "accessory": "SonyTV",
+                "name": "Living room TV",
+                "mac": "D8:5D",
+                "ip": "10.0.1.13",
+                "tvsource":"tv:dvbs",
+                "maxchannels": 18,
+                "soundoutput":"speaker"
+  }
+]
 
 ```
 
