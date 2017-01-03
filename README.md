@@ -22,9 +22,16 @@ To make Homebridge aware of the new plugin, you will have to add it to your conf
                 "ip": "10.0.1.13",
                 "tvsource":"tv:dvbs",
                 "maxchannels": 18,
-                "soundoutput":"speaker"
+                "soundoutput":"speaker",
+                "cookiepath":"/usr/node_modules/homebridge-sonytvremote/cookie"
   }
 ]
 
 ```
+###### Note: Cookie must be a file with read write access:
+``` 
+sudo chmod 777 /usr/local/lib/node_modules/homebridge-sonytvremote/cookie
+```
+######
+*where cookiepath might differ based on user setup.
 
