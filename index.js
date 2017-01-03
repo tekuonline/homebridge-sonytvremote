@@ -15,11 +15,34 @@ var cookie = null;
 var pwd = null;
 var cookiepath = "/usr/local/lib/node_modules/homebridge-sonytvremote/cookie";
 var channeltouri = [];
-var authok = false; // check if auth is okay
+var authok = false; 
 var registercheck = false;
-var MAX_CHANNEL = 100; // +1 Start Apps at Channel 1001 == Fireplace
+var MAX_CHANNEL = 100;
 var CommandCanTurnTvOn = true;
-//Global public FUNC
+
+function SonyTV(log, config) {
+    that = this;
+    this.log = log;
+    this.name = config.name;
+    this.mac = config.mac;
+    this.ip = '10.0.1.23';
+    this.comp = config.compatibilityMode;
+    this.maxchannels = config.maxchannels;
+    this.tvsource = config.tvsource;
+    this.favoritspeaker = config.soundoutput;
+    this.cookiepath = config.cokiepath || "/usr/local/lib/node_modules/homebridge-sonytvremote/cookie";
+    this._service = new Service.Switch(this.name);
+    this._service.getCharacteristic(Characteristic.On)
+    .on('set', this._control.bind(this)).on('get', this.getPowerState.bind(this));
+    this._service.addCharacteristic(VolumeCharacteristic)
+    .on('get', this.getVolume.bind(this)).on('set', this.setVolume.bind(this));
+    this._service.addCharacteristic(ChannelCharacteristic)
+    .on('get', this.getChannel.bind(this)).on('set', this.setChannel.bind(this));
+    cookie = loadCookie();
+    pwd = loadPin();
+    setTimeout(that.poweronCheckandInit, 5000);
+}
+
 function makeVolumeCharacteristic() {
     VolumeCharacteristic = function() {
         Characteristic.call(this, 'Volume', '19E1CF82-E0EE-410D-A23C-E80020354C13');
@@ -51,6 +74,7 @@ function makeChannelCharacteristic() {
     };
     inherits(ChannelCharacteristic, Characteristic);
 }
+
 var saveCookie = function(cookie) {
     if (cookie != undefined && cookie != null && cookie.length > 0)
         var fs = require('fs');
@@ -60,16 +84,17 @@ var saveCookie = function(cookie) {
                 stream.end();
                 });
 }
+
 var loadCookie = function() {
     var fs = require('fs');
-    fs.readFile(cookiepath, function(err, data) {
-                if (err) {
+    fs.readFile(cookiepath, function(err, data) {.                   if (err) {
                 return;
                 }
                 console.log("READ_COOKIE " + data);
                 cookie = data.toString();
                 });
 }
+
 var savePin = function(pin) {
     if (pin != undefined && pin != null && pin.length > 0)
         var fs = require('fs');
@@ -105,6 +130,7 @@ var setCookie = function(headers) {
                           });
     }
 }
+
 //---------------------------------------------------------------------
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
@@ -118,29 +144,6 @@ function isNull(object) {
     return object == undefined || null;
 }
 
-function SonyTV(log, config) {
-    that = this;
-    this.log = log;
-    this.name = config.name;
-    this.mac = config.mac;
-    this.ip = '10.0.1.23';
-    this.comp = config.compatibilityMode;
-    this.maxchannels = config.maxchannels;
-    this.tvsource = config.tvsource;
-    this.favoritspeaker = config.soundoutput;
-    this._service = new Service.Switch(this.name);
-    this._service.getCharacteristic(Characteristic.On)
-    .on('set', this._control.bind(this)).on('get', this.getPowerState.bind(this));
-    this._service.addCharacteristic(VolumeCharacteristic)
-    .on('get', this.getVolume.bind(this)).on('set', this.setVolume.bind(this));
-    this._service.addCharacteristic(ChannelCharacteristic)
-    .on('get', this.getChannel.bind(this)).on('set', this.setChannel.bind(this));
-    cookie = loadCookie();
-    pwd = loadPin();
-    //give load Cookie and Pin time, then check every 5 seconds
-    setTimeout(that.poweronCheckandInit, 5000);
-}
-
 SonyTV.prototype.makeHttpRequest = function(errcallback, resultcallback, url, post_data, canTurnTvOn) {
     var data = "";
     if (isNull(canTurnTvOn))
@@ -148,8 +151,6 @@ SonyTV.prototype.makeHttpRequest = function(errcallback, resultcallback, url, po
     if (!that.power && canTurnTvOn){
         that._control(true,null);
         var timeout = 25000;
-        /*if (url === "/sony/appControl")
-            timeout = 25000;*/
         setTimeout(function() {
                    that.makeHttpRequest(errcallback,resultcallback,url,post_data,false);
             },timeout);
@@ -185,17 +186,8 @@ SonyTV.prototype.makeHttpRequest = function(errcallback, resultcallback, url, po
 }
 
 SonyTV.prototype.getServices = function() {
-    /*var informationService = new Service.AccessoryInformation();
-    informationService
-    .setCharacteristic(Characteristic.Manufacturer, "Sony TV")
-    .setCharacteristic(Characteristic.Model, "Bravia KDL42")
-    .setCharacteristic(Characteristic.SerialNumber, "12345");
-    return [informationService, this._service];*/
     return [this._service];
 }
-//Check if Device is up and Init Registration and LoadChannel List
-//Every 5 Seconds check if Device if up or Down
-//check if device Manually activated
 SonyTV.prototype.poweronCheckandInit = function() {
     setTimeout(function() {
                that.getPowerState(null);
@@ -210,14 +202,13 @@ SonyTV.prototype.poweronCheckandInit = function() {
 }
 SonyTV.prototype.startFirePlace = function(state, callback) {
     var post_data = "{\"id\":13,\"method\":\"setActiveApp\",\"version\":\"1.0\",\"params\":[{\"uri\":\"kamaji://OPA-FIREPLACE-SCREENSAVER\"}]}";
-    //that.log("Load Channel Uris");
     var onError = function(err) {
         callback(null, 0);
     };
     var onSucces = function(data) {
         if (data.indexOf("error") < 0)
-            callback(null, state) //sendChannel exapmle 1001
-            else callback(null, 0); //on data erroro send channel 0
+            callback(null, state)
+            else callback(null, 0);
     };
     that.makeHttpRequest(onError, onSucces, "/sony/appControl", post_data,CommandCanTurnTvOn);
 }
@@ -233,11 +224,10 @@ SonyTV.prototype.getChannelUris = function(next50from) {
     var onSucces = function(data) {
         try {
             var result = JSON.parse(data).result[0];
-            var nextchannel = that.maxchannels; // break on errors
+            var nextchannel = that.maxchannels;
             result.forEach(function(channelblock) {
                            channeltouri[Number(channelblock.dispNum).toString()] = channelblock.uri;
                            nextchannel = channelblock.index + 1;
-                           //that.log("Add Channel "+Number(channelblock.dispNum).toString() )
                            });
             if (nextchannel < that.maxchannels)
                 that.getChannelUris(nextchannel);
@@ -247,12 +237,9 @@ SonyTV.prototype.getChannelUris = function(next50from) {
     };
     that.makeHttpRequest(onError, onSucces, "/sony/avContent/", post_data,false);
 }
-//Check if Device is Registered
-//Prompt in Console for PIN for First Registration
 SonyTV.prototype.checkAndregisterRemoteAccess = function() {
     registercheck = true;
     var post_data = "{\"id\":8,\"method\":\"actRegister\",\"version\":\"1.0\",\"params\":[{\"clientid\":\"HomeBridge:34c48639-af3d-40e7-b1b2-74091375368c\",\"nickname\":\"homebridge\"},[{\"clientid\":\"HomeBridge:34c48639-af3d-40e7-b1b2-74091375368c\",\"value\":\"yes\",\"nickname\":\"homebridge\",\"function\":\"WOL\"}]]}";
-    //var post_options = that.getpostOptions("/sony/accessControl/");
     var onError = function(err) {
         return false;
     };
@@ -273,7 +260,6 @@ SonyTV.prototype.checkAndregisterRemoteAccess = function() {
     };
     that.makeHttpRequest(onError, onSucces, "/sony/accessControl/", post_data,false);
 }
-//Get Channel
 SonyTV.prototype.getChannel = function(callback) {
     if (!that.power) {
         callback(null, 0);
@@ -336,12 +322,10 @@ SonyTV.prototype.setChannel = function(channel, callback) {
 }
 
 SonyTV.prototype.setVolume = function(volume, callback) {
-    //{"id":13,"method":"setAudioVolume","version":"1.0","params":[{"target":"speaker","volume":"50"}]}
     if (!that.power) {
         callback(null, 0);
         return;
     }
-    //that.log("setVolume");
     var post_data = "{\"id\":13,\"method\":\"setAudioVolume\",\"version\":\"1.0\",\"params\":[{\"target\":\"" + that.favoritspeaker + "\",\"volume\":\"" + volume + "\"}]}";
     var onError = function(err) {
         if (!isNull(callback))
@@ -354,12 +338,10 @@ SonyTV.prototype.setVolume = function(volume, callback) {
 }
 
 SonyTV.prototype.getVolume = function(callback) {
-    //that.checkAndregisterRemoteAccess("");
     if (!that.power) {
         callback(null, 0);
         return;
     }
-    //this.log("GetVolume");
     var post_data = "{\"id\":4,\"method\":\"getVolumeInformation\",\"version\":\"1.0\",\"params\":[\"1.0\"]}";
     var onError = function(err) {
         if (!isNull(callback))
@@ -375,11 +357,9 @@ SonyTV.prototype.getVolume = function(callback) {
             return;
         }
         for (var i = 0; i < _json.result[0].length; i++) {
-            //that.log(i);
             var volume = _json.result[0][i].volume;
             var typ = _json.result[0][i].target;
             if (typ === that.favoritspeaker) {
-                //that.log("Vol:" + volume);
                 if (!isNull(callback))
                     callback(null, volume);
                 return;
@@ -417,7 +397,6 @@ SonyTV.prototype.getPowerState = function(callback) {
         }
         
     };
-    //that.log("PING for alive Test");
     try {
         ping.sys.probe(that.ip, function(isAlive) {
                        if (isAlive) {
@@ -445,8 +424,6 @@ SonyTV.prototype.createIRRC = function(command) {
 }
 
 SonyTV.prototype.getpostOptions = function(url) {
-    /* if (url != "/sony/accessControl/")
-     that.checkAndregisterRemoteAccess();*/
     if (url == "")
         url = "/sony/IRCC";
     var post_options = null;
@@ -459,7 +436,6 @@ SonyTV.prototype.getpostOptions = function(url) {
         headers: {}
         };
     } else {
-        // An object of options to indicate where to post to
         post_options = {
         host: that.ip,
         port: '80',
@@ -469,11 +445,11 @@ SonyTV.prototype.getpostOptions = function(url) {
         };
     }
     if (!isNull(cookie)) {
-        post_options.headers.Cookie = cookie; // = { 'Cookie': cookie };
+        post_options.headers.Cookie = cookie;
     }
     if (!isNull(pwd)) {
         var encpin = 'Basic ' + base64.encode(":" + pwd);
-        post_options.headers.Authorization = encpin; //':  encpin  };
+        post_options.headers.Authorization = encpin;
     }
     return post_options;
 }
@@ -489,7 +465,6 @@ SonyTV.prototype._control = function(state, callback) {
     if (state) {
         wol.wake(this.mac, function(error) {
                  if (error) {
-                 //that._service.setCharacteristic(Characteristic.On, false);
                  that.log("Error when sending packets", error);
                  that.getPowerState(callback);
                  } else {
@@ -498,7 +473,7 @@ SonyTV.prototype._control = function(state, callback) {
                  that.getPowerState(callback);
                  }
                  });
-    } else { //Send PowerOff IRCODE
+    } else {
         var post_data = that.createIRRC("AAAAAQAAAAEAAAAvAw==");
         that.makeHttpRequest(onError, onSucces, "", post_data,false);
     }
