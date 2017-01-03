@@ -144,6 +144,32 @@ function isNull(object) {
     return object == undefined || null;
 }
 
+<<<<<<< HEAD
+=======
+function SonyTV(log, config) {
+    that = this;
+    this.log = log;
+    this.name = config.name;
+    this.mac = config.mac;
+    this.ip = config.ip;
+    this.comp = config.compatibilityMode;
+    this.maxchannels = config.maxchannels;
+    this.tvsource = config.tvsource;
+    this.favoritspeaker = config.soundoutput;
+    this._service = new Service.Switch(this.name);
+    this._service.getCharacteristic(Characteristic.On)
+    .on('set', this._control.bind(this)).on('get', this.getPowerState.bind(this));
+    this._service.addCharacteristic(VolumeCharacteristic)
+    .on('get', this.getVolume.bind(this)).on('set', this.setVolume.bind(this));
+    this._service.addCharacteristic(ChannelCharacteristic)
+    .on('get', this.getChannel.bind(this)).on('set', this.setChannel.bind(this));
+    cookie = loadCookie();
+    pwd = loadPin();
+    //give load Cookie and Pin time, then check every 5 seconds
+    setTimeout(that.poweronCheckandInit, 5000);
+}
+
+>>>>>>> origin/master
 SonyTV.prototype.makeHttpRequest = function(errcallback, resultcallback, url, post_data, canTurnTvOn) {
     var data = "";
     if (isNull(canTurnTvOn))

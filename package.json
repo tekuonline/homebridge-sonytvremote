@@ -1,54 +1,10 @@
 {
-  "_args": [
-    [
-      "homebridge-sonytvremote",
-      "/usr/local"
-    ],
-    [
-      "homebridge-sonytvremote",
-      "/usr/local"
-    ],
-    [
-      "homebridge-sonytvremote",
-      "/usr/local"
-    ]
-  ],
-  "_from": "homebridge-sonytvremote@*",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/homebridge-sonytvremote",
-  "_nodeVersion": "5.7.1",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/homebridge-sonytvremote-1.1.1.tgz_1459535936137_0.37809855956584215"
-  },
-  "_npmUser": {
-    "name": "lombi",
-    "email": "oliver@lombardi-mail.de"
-  },
-  "_npmVersion": "3.6.0",
-  "_phantomChildren": {},
-  "_requested": {
-    "name": null,
-    "raw": "homebridge-sonytvremote",
-    "rawSpec": "homebridge-sonytvremote",
-    "scope": null,
-    "spec": "/usr/local/node_modules/homebridge-sonytvremote",
-    "type": "directory"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/homebridge-sonytvremote/-/homebridge-sonytvremote-1.1.1.tgz",
-  "_shasum": "5ff74c382cd2aa4943ad809b7df147a76e245216",
-  "_shrinkwrap": null,
-  "_spec": "homebridge-sonytvremote",
-  "_where": "/usr/local",
-  "author": {
-    "name": "Oliver Lombardi"
-  },
-  "bugs": {
-    "url": "https://github.com/lombardi-zz/ppm/issues"
+  "name": "homebridge-sonytvremote",
+  "version": "0.0.1",
+  "description": "Sony tv",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
   },
   "dependencies": {
     "wake_on_lan": "0.0.4",
@@ -57,38 +13,17 @@
     "ping": ">=0.1.0",
     "base-64": ">=0.0.0"
   },
-  "description": "Remote Control for Sony Brarvia KDL TV",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "5ff74c382cd2aa4943ad809b7df147a76e245216",
-    "tarball": "https://registry.npmjs.org/homebridge-sonytvremote/-/homebridge-sonytvremote-1.1.1.tgz"
+  "engines": {
+    "node": ">= 0.10.0"
   },
-  "homepage": "https://github.com/lombardi-zz/ppm#readme",
-  "keywords": [
-    "homebridge-plugin"
-  ],
-  "license": "ISC",
-  "main": "index.js",
-  "maintainers": [
-    {
-      "name": "lombi",
-      "email": "oliver@lombardi-mail.de"
-    }
-  ],
-  "name": "homebridge-sonytvremote",
-  "optionalDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lombardi-zz/ppm.git"
+    "url": "https://github.com/tekuonline/homebridge-sonytvremote"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": ">= 0.0.16",
-    "homebridge": ">=0.2.0"
-  },
-  "version": "1.1.1",
-  "_id": "homebridge-sonytvremote@1.1.1"
+  "keywords": [
+    "Sony tv",
+    "home automation",
+    "sony tv homebridge"
+  ],
+  "license": "GPL"
 }
