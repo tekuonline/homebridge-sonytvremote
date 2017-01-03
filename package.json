@@ -1,10 +1,26 @@
 {
   "name": "homebridge-sonytvremote",
-  "version": "0.0.1",
-  "description": "Sony tv",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "version": "0.1.0",
+  "description": "Sony tv plugin for HomeBridge: https://github.com/nfarina/homebridge",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tekuonline/homebridge-sonytvremote.git"
+  },
+  "keywords": [
+    "homebridge-plugin"
+  ],
+  "author": "",
+  "contributor": [{
+  "name": ""
+}],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tekuonline/homebridge-sonytvremote/issues"
+  },
+  "homepage": "https://github.com/tekuonline/homebridge-sonytvremote#readme",
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.3.0"
   },
   "dependencies": {
     "wake_on_lan": "0.0.4",
@@ -12,18 +28,5 @@
     "prompt": ">=0.0.0",
     "ping": ">=0.1.0",
     "base-64": ">=0.0.0"
-  },
-  "engines": {
-    "node": ">= 0.10.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tekuonline/homebridge-sonytvremote"
-  },
-  "keywords": [
-    "Sony tv",
-    "home automation",
-    "sony tv homebridge"
-  ],
-  "license": "GPL"
+  }
 }
