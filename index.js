@@ -25,7 +25,7 @@ function SonyTV(log, config) {
     this.log = log;
     this.name = config.name;
     this.mac = config.mac;
-    this.ip = '10.0.1.23';
+    this.ip = config.ip;
     this.comp = config.compatibilityMode;
     this.maxchannels = config.maxchannels;
     this.tvsource = config.tvsource;
