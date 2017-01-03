@@ -13,7 +13,7 @@ var ChannelCharacteristic;
 var FIREPLACE_SWITCH;
 var cookie = null;
 var pwd = null;
-var cookiepath;
+var cookiepath = null;
 var channeltouri = [];
 var authok = false; 
 var registercheck = false;
