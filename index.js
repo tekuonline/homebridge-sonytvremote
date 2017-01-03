@@ -30,7 +30,7 @@ function SonyTV(log, config) {
     this.maxchannels = config.maxchannels;
     this.tvsource = config.tvsource;
     this.favoritspeaker = config.soundoutput;
-    this.cookiepath = config.cokiepath || "/usr/local/lib/node_modules/homebridge-sonytvremote/cookie";
+    cookiepath = config.cokiepath || "/usr/local/lib/node_modules/homebridge-sonytvremote/cookie";
     this._service = new Service.Switch(this.name);
     this._service.getCharacteristic(Characteristic.On)
     .on('set', this._control.bind(this)).on('get', this.getPowerState.bind(this));
