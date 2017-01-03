@@ -13,7 +13,7 @@ var ChannelCharacteristic;
 var FIREPLACE_SWITCH;
 var cookie = null;
 var pwd = null;
-var cookiepath = "/usr/local/lib/node_modules/homebridge-sonytvremote/cookie";
+var cookiepath;
 var channeltouri = [];
 var authok = false; 
 var registercheck = false;
